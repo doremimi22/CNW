@@ -30,18 +30,34 @@ public class LoginServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
+        System.out.println(">>> LOGIN REQUEST");
+        System.out.println("Username nhập vào: " + username);
+        System.out.println("Password nhập vào: " + password);
+
         User u = userDAO.checkLogin(username, password);
 
         if (u == null) {
-            // Ghi lỗi vào session
+            System.out.println(">>> LOGIN FAILED: Không tìm thấy user hoặc sai mật khẩu!");
+
             req.getSession().setAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
-            // Quay về login bằng redirect để không giữ dữ liệu cũ
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-        // Đăng nhập đúng
-        req.getSession().setAttribute("user", u);
+        // LOGIN THÀNH CÔNG
+        System.out.println(">>> LOGIN SUCCESS");
+        System.out.println("User: " + u.getUsername());
+        System.out.println("Role: " + u.getRole());
+
+        HttpSession session = req.getSession();
+        session.setAttribute("user", u);
+
+        // Kiểm tra lại session set thành công chưa
+        User sessionUser = (User) session.getAttribute("user");
+        System.out.println("Session user đã set: " +
+            (sessionUser != null ? sessionUser.getUsername() : "NULL"));
+
         resp.sendRedirect(req.getContextPath() + "/home");
     }
+
 }

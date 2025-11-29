@@ -124,13 +124,36 @@
 <!-- HEADER -->
 <div class="header">
     <div class="logo">Mimiu Studio</div>
+
     <nav>
         <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
         <a href="${pageContext.request.contextPath}/search">Tìm kiếm</a>
-        <a href="#">Thư viện</a>
-        <a href="#">Tạo Playlist</a>
+        <a href="${pageContext.request.contextPath}/library">Thư viện</a>
+        <a href="${pageContext.request.contextPath}/playlist">Tạo Playlist</a>
+
+        <!-- Nếu đã đăng nhập -->
+        <c:if test="${not empty sessionScope.user}">
+            <span style="margin-left:25px; opacity:0.85;">
+                👤 ${sessionScope.user.username}
+            </span>
+
+            <a href="${pageContext.request.contextPath}/logout"
+               style="margin-left:20px; color:#ff8080;">
+                Đăng xuất
+            </a>
+        </c:if>
+
+        <!-- Nếu chưa đăng nhập -->
+        <c:if test="${empty sessionScope.user}">
+            <a href="${pageContext.request.contextPath}/login"
+               style="margin-left:20px; color:#8fb4ff;">
+                Đăng nhập
+            </a>
+        </c:if>
+
     </nav>
 </div>
+
 
 <div class="container">
 

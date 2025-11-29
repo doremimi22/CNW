@@ -42,9 +42,10 @@ public class UserDAO {
 
             if (rs.next()) {
                 user = new User();
-                user.setUserId(rs.getInt("id"));
+                user.setUserId(rs.getInt("user_id"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role")); 
             }
 
         } catch (Exception e) {

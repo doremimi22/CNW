@@ -9,7 +9,7 @@ public class Song {
     private int year;
     private String thumbnail;
     private String link;
-
+    private String genre;
     private List<Artist> artists;  // nhiều ca sĩ
 
     public int getSongId() { return songId; }
@@ -30,6 +30,8 @@ public class Song {
     public String getLink() { return link; }
     public void setLink(String link) { this.link = link; }
 
+    public String getGenre() { return genre; }
+    public void sẻGenre(String genre) { this.genre = genre; }
     public List<Artist> getArtists() { return artists; }
     public void setArtists(List<Artist> artists) { this.artists = artists; }
 }

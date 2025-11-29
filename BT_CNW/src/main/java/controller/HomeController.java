@@ -24,16 +24,23 @@ public class HomeController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
+        // 🔒 Kiểm tra đăng nhập
+        HttpSession session = req.getSession();
+        if (session.getAttribute("user") == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+
         // Lấy dữ liệu từ DB
-        ArrayList<Song> songs = songDAO.getAll();     // bạn có thể tạo hàm getTop5()
+        ArrayList<Song> songs = songDAO.getAll();
         ArrayList<Album> albums = albumDAO.getAll();
         ArrayList<Artist> artists = artistDAO.getAll();
 
-        // Đưa vào request
         req.setAttribute("songs", songs);
         req.setAttribute("albums", albums);
         req.setAttribute("artists", artists);
 
         req.getRequestDispatcher("/views/home.jsp").forward(req, resp);
     }
+
 }

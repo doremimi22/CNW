@@ -1,5 +1,6 @@
 package model.dao;
 
+import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -196,6 +197,66 @@ public class SongDAO {
 
 	    } catch (Exception e) { e.printStackTrace(); }
 	    return list;
+	}
+ public boolean insert(Song s) {
+	    String sql = "INSERT INTO songs (title, year, thumbnail, description) VALUES (?, ?, ?, ?)";
+
+	    try (Connection con = DBConnect.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setString(1, s.getTitle());
+	        ps.setInt(2, s.getYear());
+	        ps.setString(3, s.getThumbnail());
+	        ps.setString(4, s.getDescription());
+
+	        return ps.executeUpdate() > 0;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+ public int insertAndReturnId(Song s) {
+
+	    String sql = "INSERT INTO songs (title, year, thumbnail, description, link) "
+	               + "VALUES (?, ?, ?, ?, ?)";
+
+	    try (Connection con = DBConnect.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+
+	        ps.setString(1, s.getTitle());
+	        ps.setInt(2, s.getYear());
+	        ps.setString(3, s.getThumbnail());
+	        ps.setString(4, s.getDescription());
+	        ps.setString(5, s.getLink());
+
+	        ps.executeUpdate();
+
+	        ResultSet rs = ps.getGeneratedKeys();
+	        if (rs.next()) return rs.getInt(1);
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return -1;
+	}
+
+	public boolean insertSongArtist(int songId, int artistId) {
+	    String sql = "INSERT INTO song_artists (song_id, artist_id) VALUES (?, ?)";
+
+	    try (Connection con = DBConnect.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setInt(1, songId);
+	        ps.setInt(2, artistId);
+
+	        return ps.executeUpdate() > 0;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return false;
 	}
 
 }
