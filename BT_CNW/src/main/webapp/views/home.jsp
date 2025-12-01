@@ -251,6 +251,7 @@
                 <div class="dropdown-content">
                     <a href="${pageContext.request.contextPath}/song/create">Tạo bài hát</a>
                     <a href="${pageContext.request.contextPath}/album/create">Tạo album</a>
+                      <a href="${pageContext.request.contextPath}/artist/create">Tạo nghệ sĩ</a>
                 </div>
             </div>
         </c:if>

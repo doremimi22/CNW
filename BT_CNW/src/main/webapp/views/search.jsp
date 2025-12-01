@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
@@ -12,13 +12,13 @@
 
         body {
             font-family: "Poppins", sans-serif;
-            background-color: #0b0b0b;
+            background: #0b0b0b;
             color: white;
-            padding-top: 100px;
             overflow-x: hidden;
+            padding-top: 105px;
         }
 
-        /* HEADER */
+        /* ================= HEADER ================= */
         .header {
             position: fixed;
             top: 0; left: 0;
@@ -27,161 +27,173 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.45);
+            backdrop-filter: blur(12px);
             z-index: 1000;
         }
-        .header .logo { font-size: 26px; font-weight: bold; }
-        .header nav a {
+
+        .logo { font-size: 26px; font-weight: bold; }
+
+        nav a {
             margin-left: 35px;
+            font-size: 15px;
             text-decoration: none;
             color: white;
-            opacity: 0.85;
+            opacity: .9;
         }
-        .header nav a:hover { opacity: 1; }
+        nav a:hover { opacity: 1; }
 
-        /* WRAP */
+        .dropdown { position: relative; display: inline-block; margin-left: 35px; }
+        .drop-btn { cursor: pointer; opacity:.9; }
+
+        .dropdown-content {
+            display:none;
+            position:absolute;
+            top:30px; left:0;
+            width:160px;
+            background:rgba(30,30,30,0.95);
+            border-radius:10px;
+            padding:8px 0;
+        }
+
+        .dropdown:hover .dropdown-content { display:block; }
+
+        .dropdown-content a {
+            display:block;
+            padding:10px 14px;
+            font-size:14px;
+            text-decoration:none;
+            color:white;
+            opacity:.85;
+        }
+        .dropdown-content a:hover { background:#555; }
+
+        .user-icon {
+            margin-left:25px;
+            font-size:20px;
+            opacity:.85;
+        }
+        .user-icon:hover { opacity:1; }
+
+        .header-spacer { height: 95px; }
+
+        /* ================= CONTENT ================= */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 25px;
         }
 
-        /* SEARCH INPUT */
-        .search-title { font-size: 35px; font-weight: bold; margin-bottom: 20px; }
+        .search-title {
+            font-size: 35px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
 
         .search-box {
             width: 100%;
-            background: #1c1c1c;
-            padding: 18px 20px;
-            border-radius: 14px;
+            padding: 18px;
+            border-radius: 12px;
             border: 2px solid #333;
-            font-size: 18px;
+            background: #1a1a1a;
             color: white;
+            font-size: 18px;
             outline: none;
         }
-        .search-box:focus { border-color: #666; }
 
-        /* SECTION TITLE */
+        .search-box:focus { border-color:#777; }
+
         .section-title {
-            margin-top: 40px;
             font-size: 22px;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin: 40px 0 15px 0;
         }
 
-        /* CARDS */
         .card-row {
             display: flex;
             gap: 25px;
             overflow-x: auto;
             padding-bottom: 20px;
-            margin-top: 10px;
         }
-        .card-row::-webkit-scrollbar { display: none; }
+        .card-row::-webkit-scrollbar { display:none; }
 
         .card {
+            width: 160px;
             background: #1b1b1b;
-            border-radius: 12px;
-            width: 150px;
             padding: 12px;
-            transition: 0.3s;
+            border-radius: 12px;
             cursor: pointer;
+            transition:.3s;
         }
-        .card:hover { transform: scale(1.05); }
+        .card:hover { transform: scale(1.06); }
 
         .card img {
             width: 100%;
-            height: 150px;
-            border-radius: 10px;
-            object-fit: cover;
+            height: 160px;
+            border-radius:10px;
+            object-fit:cover;
         }
 
         .song-name { margin-top: 10px; font-size: 15px; }
-        .artist { opacity: 0.7; font-size: 13px; }
-
-        /* TAGS */
-        .tag-row { display: flex; flex-wrap: wrap; gap: 15px; }
-
-        .tag {
-            padding: 10px 18px;
-            background: #1b1b1b;
-            border-radius: 30px;
-            border: 1px solid #333;
-            color: white;
-            font-size: 14px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-        .tag:hover { background: #333; transform: scale(1.05); }
-
+        .artist { font-size: 13px; opacity:.7; }
     </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
+<!-- ================= HEADER ================= -->
 <div class="header">
-    <div class="logo">Mimiu Studio</div>
+    <div class="logo">
+        <c:choose>
+            <c:when test="${sessionScope.user.role == 'admin'}">
+                Mimiu Studio <span style="color:#ffcc00;">★ Admin</span>
+            </c:when>
+            <c:otherwise>Mimiu Studio</c:otherwise>
+        </c:choose>
+    </div>
 
     <nav>
         <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
         <a href="${pageContext.request.contextPath}/search">Tìm kiếm</a>
         <a href="${pageContext.request.contextPath}/library">Thư viện</a>
-        <a href="${pageContext.request.contextPath}/playlist">Tạo Playlist</a>
 
-        <!-- Nếu đã đăng nhập -->
+        <!-- ADMIN MENU -->
+        <c:if test="${sessionScope.user.role == 'admin'}">
+            <div class="dropdown">
+                <span class="drop-btn">Tạo mới ▼</span>
+                <div class="dropdown-content">
+                    <a href="${pageContext.request.contextPath}/song/create">Tạo bài hát</a>
+                    <a href="${pageContext.request.contextPath}/album/create">Tạo album</a>
+                    <a href="${pageContext.request.contextPath}/artist/create">Tạo nghệ sĩ</a>
+                </div>
+            </div>
+        </c:if>
+
+        <!-- USER STATUS -->
         <c:if test="${not empty sessionScope.user}">
-            <span style="margin-left:25px; opacity:0.85;">
-                👤 ${sessionScope.user.username}
-            </span>
-
-            <a href="${pageContext.request.contextPath}/logout"
-               style="margin-left:20px; color:#ff8080;">
-                Đăng xuất
-            </a>
+            <div class="user-icon" title="${sessionScope.user.username}">👤</div>
+            <a href="${pageContext.request.contextPath}/logout" style="color:#ff6f6f;">Đăng xuất</a>
         </c:if>
 
-        <!-- Nếu chưa đăng nhập -->
         <c:if test="${empty sessionScope.user}">
-            <a href="${pageContext.request.contextPath}/login"
-               style="margin-left:20px; color:#8fb4ff;">
-                Đăng nhập
-            </a>
+            <a href="${pageContext.request.contextPath}/login" style="color:#8fb4ff;">Đăng nhập</a>
         </c:if>
-
     </nav>
 </div>
 
+<div class="header-spacer"></div>
 
+<!-- ================= CONTENT ================= -->
 <div class="container">
 
-    <!-- TITLE -->
     <div class="search-title">Bạn muốn nghe gì?</div>
 
-    <!-- SEARCH FORM -->
     <form action="${pageContext.request.contextPath}/search" method="get">
-        <input name="q" type="text" class="search-box"
-               placeholder="Tìm bài hát, nghệ sĩ hoặc album..."
+        <input type="text" class="search-box" name="q" placeholder="Tìm bài hát, nghệ sĩ, album..."
                value="${param.q}">
     </form>
 
-    <!-- TAG SUGGEST -->
-    <div class="section-title">Khám phá nội dung mới mẻ</div>
-
-    <div class="tag-row">
-        <a href="search?q=indie" class="tag">#indie</a>
-        <a href="search?q=vpop" class="tag">#v-pop</a>
-        <a href="search?q=lofi" class="tag">#lofi</a>
-        <a href="search?q=chill" class="tag">#chill</a>
-        <a href="search?q=ballad" class="tag">#ballad</a>
-        <a href="search?q=kpop" class="tag">#k-pop</a>
-        <a href="search?q=rap" class="tag">#rap</a>
-    </div>
-
-
-    <!-- ================== SONG RESULTS ================== -->
+    <!-- SONGS -->
     <c:if test="${not empty songs}">
         <div class="section-title">Bài hát</div>
         <div class="card-row">
@@ -196,8 +208,7 @@
         </div>
     </c:if>
 
-
-    <!-- ================== ARTIST RESULTS ================== -->
+    <!-- ARTISTS -->
     <c:if test="${not empty artists}">
         <div class="section-title">Nghệ sĩ</div>
         <div class="card-row">
@@ -212,8 +223,7 @@
         </div>
     </c:if>
 
-
-    <!-- ================== ALBUM RESULTS ================== -->
+    <!-- ALBUMS -->
     <c:if test="${not empty albums}">
         <div class="section-title">Album</div>
         <div class="card-row">
@@ -228,10 +238,9 @@
         </div>
     </c:if>
 
-
-    <!-- ================== NO RESULT ================== -->
+    <!-- NO RESULT -->
     <c:if test="${empty songs and empty artists and empty albums and not empty param.q}">
-        <div class="section-title">Không tìm thấy kết quả cho từ khóa "<b>${param.q}</b>"</div>
+        <div class="section-title">Không tìm thấy kết quả cho "<b>${param.q}</b>"</div>
     </c:if>
 
 </div>

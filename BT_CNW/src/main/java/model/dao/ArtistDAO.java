@@ -2,6 +2,7 @@ package model.dao;
 
 import java.sql.*;
 import java.util.ArrayList;
+
 import model.bean.Artist;
 import model.bean.Song;
 import model.bean.Album;
@@ -29,12 +30,11 @@ public class ArtistDAO {
             }
 
         } catch (Exception e) { e.printStackTrace(); }
-        System.out.println("Artist list size = " + list.size());
 
         return list;
     }
 
-    // Lấy nghệ sĩ theo ID
+    // Lấy 1 nghệ sĩ
     public Artist getById(int id) {
         Artist a = null;
         String sql = "SELECT * FROM artists WHERE artist_id = ?";
@@ -43,8 +43,8 @@ public class ArtistDAO {
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
 
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 a = new Artist();
                 a.setArtistId(rs.getInt("artist_id"));
@@ -55,10 +55,11 @@ public class ArtistDAO {
             }
 
         } catch (Exception e) { e.printStackTrace(); }
+
         return a;
     }
 
-    // Tìm nghệ sĩ theo keyword
+    // Tìm nghệ sĩ
     public ArrayList<Artist> searchArtists(String keyword) {
         ArrayList<Artist> list = new ArrayList<>();
         String sql = "SELECT * FROM artists WHERE name LIKE ?";
@@ -80,16 +81,17 @@ public class ArtistDAO {
             }
 
         } catch (Exception e) { e.printStackTrace(); }
+
         return list;
     }
 
- // Lấy bài hát của nghệ sĩ
+    // Lấy bài hát của nghệ sĩ
     public ArrayList<Song> getSongsByArtist(int artistId) {
         ArrayList<Song> list = new ArrayList<>();
 
         String sql =
             "SELECT s.* FROM songs s " +
-            "JOIN song_artists sa ON s.song_id = sa.song_id " +   // <-- ĐÃ SỬA
+            "JOIN song_artists sa ON s.song_id = sa.song_id " +
             "WHERE sa.artist_id = ?";
 
         try (Connection con = DBConnect.getConnection();
@@ -110,16 +112,18 @@ public class ArtistDAO {
             }
 
         } catch (Exception e) { e.printStackTrace(); }
+
         return list;
     }
- // Lấy album của nghệ sĩ
+
+    // Lấy album có bài hát của nghệ sĩ
     public ArrayList<Album> getAlbumsByArtist(int artistId) {
         ArrayList<Album> list = new ArrayList<>();
 
         String sql =
             "SELECT DISTINCT a.* FROM albums a " +
-            "JOIN album_songs als ON a.album_id = als.album_id " +  // <-- ĐÃ SỬA
-            "JOIN song_artists sa ON als.song_id = sa.song_id " +    // <-- ĐÃ SỬA
+            "JOIN album_songs als ON a.album_id = als.album_id " +
+            "JOIN song_artists sa ON als.song_id = sa.song_id " +
             "WHERE sa.artist_id = ?";
 
         try (Connection con = DBConnect.getConnection();
@@ -139,8 +143,11 @@ public class ArtistDAO {
             }
 
         } catch (Exception e) { e.printStackTrace(); }
+
         return list;
     }
+
+    // Lấy nghệ sĩ của 1 bài hát
     public ArrayList<Artist> getArtistsBySong(int songId) {
         ArrayList<Artist> list = new ArrayList<>();
 
@@ -170,4 +177,24 @@ public class ArtistDAO {
         return list;
     }
 
+    // Thêm nghệ sĩ
+    public boolean insertArtist(Artist ar) {
+        String sql =
+            "INSERT INTO artists (name, biography, birthday, avatar, created_at) " +
+            "VALUES (?, ?, ?, ?, NOW())";
+
+        try (Connection con = DBConnect.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, ar.getName());
+            ps.setString(2, ar.getBiography());
+            ps.setString(3, ar.getBirthday());
+            ps.setString(4, ar.getAvatar());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) { e.printStackTrace(); }
+
+        return false;
+    }
 }

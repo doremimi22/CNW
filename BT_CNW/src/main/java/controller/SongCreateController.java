@@ -9,7 +9,6 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
-
 @WebServlet("/song/create")
 @MultipartConfig
 public class SongCreateController extends HttpServlet {
@@ -31,25 +30,46 @@ public class SongCreateController extends HttpServlet {
 
         req.setCharacterEncoding("UTF-8");
 
+        // ===== TITLE =====
         String title = req.getParameter("title");
-        int year = Integer.parseInt(req.getParameter("year"));
+
+        // ===== YEAR (fix error) =====
+        String yearStr = req.getParameter("year");
+        int year = 0;
+        if (yearStr != null && !yearStr.trim().isEmpty()) {
+            try { year = Integer.parseInt(yearStr.trim()); }
+            catch (Exception ignore) {}
+        }
+
         String link = req.getParameter("link");
         String description = req.getParameter("description");
-        int artistId = Integer.parseInt(req.getParameter("artist_id"));
 
-        // ==== UPLOAD FILE ====
+        // ===== ARTIST (fix error) =====
+        String artistStr = req.getParameter("artist_id");
+        int artistId = 0;
+        if (artistStr != null && !artistStr.trim().isEmpty()) {
+            try { artistId = Integer.parseInt(artistStr.trim()); }
+            catch (Exception ignore) {}
+        }
+
+        if (artistId == 0) {
+            req.setAttribute("error", "Bạn chưa chọn nghệ sĩ!");
+            doGet(req, resp);
+            return;
+        }
+
+        // ===== UPLOAD FILE =====
         Part filePart = req.getPart("thumbnail");
         String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
 
-        String uploadPath = req.getServletContext().getRealPath("/") + "uploads";
+        String uploadPath = req.getServletContext().getRealPath("/") + "uploads/songs";
         File dir = new File(uploadPath);
         if (!dir.exists()) dir.mkdirs();
 
         filePart.write(uploadPath + File.separator + fileName);
+        String thumbnailPath = "uploads/songs/" + fileName;
 
-        String thumbnailPath = "uploads/" + fileName;
-
-        // ==== CREATE SONG ====
+        // ===== CREATE SONG =====
         Song s = new Song();
         s.setTitle(title);
         s.setYear(year);
@@ -65,9 +85,10 @@ public class SongCreateController extends HttpServlet {
             return;
         }
 
-        // LƯU SONG_ARTISTS
+        // ===== INSERT song_artists =====
         songDAO.insertSongArtist(newSongID, artistId);
 
+        // DONE
         resp.sendRedirect(req.getContextPath() + "/home");
     }
 }

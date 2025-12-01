@@ -7,16 +7,19 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-import model.bo.AlbumBO;
-import model.dao.AlbumDAO;
-import model.dao.SongDAO;
 import model.bean.Album;
+import model.bean.Artist;
 import model.bean.Song;
+import model.dao.AlbumDAO;
+import model.dao.ArtistDAO;
+import model.dao.SongDAO;
 
 @WebServlet("/album")
 public class AlbumController extends HttpServlet {
 
-    private AlbumBO albumBO = new AlbumBO();
+    private AlbumDAO albumDAO = new AlbumDAO();
+    private SongDAO songDAO = new SongDAO();
+    private ArtistDAO artistDAO = new ArtistDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -30,45 +33,63 @@ public class AlbumController extends HttpServlet {
         }
 
         switch (action) {
-        case "detail":
-            int id = Integer.parseInt(req.getParameter("id"));
-
-            AlbumDAO adao = new AlbumDAO();
-            SongDAO sdao = new SongDAO();
-
-            Album al = adao.getAlbumById(id);
-            ArrayList<Song> songs = sdao.getSongsByAlbum(id);
-
-            req.setAttribute("album", al);
-            req.setAttribute("songs", songs);
-
-            req.getRequestDispatcher("/views/album_detail.jsp").forward(req, resp);
-            return;
+            case "detail":
+                showDetail(req, resp);
+                return;
 
             default:
                 list(req, resp);
         }
     }
 
+    /* ================= SHOW LIST ================= */
     private void list(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        ArrayList<Album> list = albumBO.getAllAlbums();
+        ArrayList<Album> list = albumDAO.getAll();
         req.setAttribute("albums", list);
 
         req.getRequestDispatcher("/views/album_list.jsp").forward(req, resp);
     }
 
-    private void detail(HttpServletRequest req, HttpServletResponse resp)
+    /* ================= DETAIL ALBUM ================= */
+    private void showDetail(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        int id = Integer.parseInt(req.getParameter("id"));
+        int albumId = Integer.parseInt(req.getParameter("id"));
 
-        Album album = albumBO.getAlbumById(id);
-        ArrayList<Song> songs = albumBO.getSongsOfAlbum(id);
+        // Lấy album
+        Album album = albumDAO.getAlbumById(albumId);
+
+        // Lấy bài hát trong album
+        ArrayList<Song> songs = songDAO.getSongsByAlbum(albumId);
+
+        // Gắn nghệ sĩ cho từng bài hát
+        for (Song s : songs) {
+            s.setArtists(artistDAO.getArtistsBySong(s.getSongId()));
+        }
+
+        // ======================
+        // Lấy danh sách nghệ sĩ thuộc album (tránh trùng)
+        // ======================
+        ArrayList<Artist> artists = new ArrayList<>();
+
+        for (Song s : songs) {
+            for (Artist ar : s.getArtists()) {
+                boolean exists = false;
+                for (Artist ax : artists) {
+                    if (ax.getArtistId() == ar.getArtistId()) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) artists.add(ar);
+            }
+        }
 
         req.setAttribute("album", album);
         req.setAttribute("songs", songs);
+        req.setAttribute("artists", artists);
 
         req.getRequestDispatcher("/views/album_detail.jsp").forward(req, resp);
     }

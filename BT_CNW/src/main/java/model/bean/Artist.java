@@ -6,7 +6,21 @@ public class Artist {
     private String biography;
     private String birthday;
     private String avatar;
+    private String createdAt;
 
+    public Artist() {}
+
+    public Artist(int artistId, String name, String biography,
+                  String birthday, String avatar, String createdAt) {
+        this.artistId = artistId;
+        this.name = name;
+        this.biography = biography;
+        this.birthday = birthday;
+        this.avatar = avatar;
+        this.createdAt = createdAt;
+    }
+
+    // GETTERS + SETTERS
     public int getArtistId() { return artistId; }
     public void setArtistId(int artistId) { this.artistId = artistId; }
 
@@ -21,4 +35,7 @@ public class Artist {
 
     public String getAvatar() { return avatar; }
     public void setAvatar(String avatar) { this.avatar = avatar; }
+
+    public String getCreatedAt() { return createdAt; }
+    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
 }
