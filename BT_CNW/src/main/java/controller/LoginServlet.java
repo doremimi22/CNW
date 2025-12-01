@@ -51,12 +51,14 @@ public class LoginServlet extends HttpServlet {
 
         HttpSession session = req.getSession();
         session.setAttribute("user", u);
-
+        
+        session.setAttribute("fullname", u.getFullname());
+        session.setAttribute("user_id",u.getUserId());
         // Kiểm tra lại session set thành công chưa
         User sessionUser = (User) session.getAttribute("user");
         System.out.println("Session user đã set: " +
             (sessionUser != null ? sessionUser.getUsername() : "NULL"));
-
+        System.out.println("Session user đã set: " + session.getAttribute("fullname"));
         resp.sendRedirect(req.getContextPath() + "/home");
     }
 

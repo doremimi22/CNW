@@ -11,7 +11,7 @@ import config.DBConnect;
 public class ArtistDAO {
 
     // Lấy tất cả nghệ sĩ
-    public ArrayList<Artist> getAll() {
+    public static ArrayList<Artist> getAll() {
         ArrayList<Artist> list = new ArrayList<>();
         String sql = "SELECT * FROM artists";
 

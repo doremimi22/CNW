@@ -5,7 +5,7 @@ public class User {
     private String username;
     private String password;
     private String role;
-
+    private String fullname;
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
 
@@ -17,4 +17,6 @@ public class User {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+    public String getFullname() { return fullname; }
+    public void setFullname(String fullname) { this.fullname = fullname; }
 }

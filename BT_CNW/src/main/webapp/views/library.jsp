@@ -1,103 +1,29 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Thư viện – Mimiu Studio</title>
+    <title>Playlist – Mimiu Studio</title>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        body { font-family: "Poppins", sans-serif; background: #0b0b0b; color: white; }
 
-        body {
-            font-family: "Poppins", sans-serif;
-            background-color: #0b0b0b;
-            color: white;
-            padding-top: 100px;
-            overflow-x: hidden;
-        }
+        .header-spacer { height: 100px; }
 
-        /* ---------------- HEADER ---------------- */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-        }
-
-        .header .logo {
-            font-size: 26px;
-            font-weight: bold;
-        }
-
-        .header nav a {
-            margin-left: 35px;
-            text-decoration: none;
-            color: white;
-            opacity: 0.85;
-            font-size: 15px;
-        }
-
-        .header nav a:hover {
-            opacity: 1;
-        }
-
-        /* ---------------- CONTENT WRAPPER ---------------- */
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 25px;
+            width: 90%;
+            margin: auto;
+            margin-top: 20px;
         }
 
-        /* ---------------- TAG FILTER BUTTONS ---------------- */
-        .filter-tags {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 35px;
-        }
-
-        .tag-btn {
-            padding: 10px 25px;
-            border-radius: 25px;
-            font-size: 16px;
-            border: 2px solid #6a4dfc;
-            color: #d6c9ff;
-            cursor: pointer;
-            background: transparent;
-            transition: 0.25s;
-            user-select: none;
-        }
-
-        .tag-btn:hover {
-            background: #6a4dfc30;
-        }
-
-        /* Khi được chọn */
-        .tag-btn.active {
-            background: #6a4dfc;
-            color: white;
-            border-color: #7d5bff;
-        }
-
-        /* ---------------- SECTION TITLE ---------------- */
         .section-title {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: bold;
-            margin: 25px 0 15px 0;
+            margin-bottom: 18px;
         }
 
-        /* ---------------- PLAYLIST CARDS (SQUARE) ---------------- */
         .playlist-row {
             display: flex;
             gap: 25px;
@@ -105,194 +31,77 @@
         }
 
         .playlist-card {
-            width: 180px;
+            width: 220px;
             background: #1b1b1b;
             border-radius: 12px;
-            padding: 15px;
-            transition: 0.25s;
+            padding: 14px;
             cursor: pointer;
+            transition: .25s;
         }
+        .playlist-card:hover { transform: scale(1.06); }
 
-        .playlist-card:hover {
-            transform: scale(1.05);
-        }
-
-        .playlist-card img {
+        .playlist-img {
             width: 100%;
-            height: 170px;
+            height: 180px;
             border-radius: 10px;
             object-fit: cover;
+            background: #333;
         }
 
         .playlist-name {
             margin-top: 12px;
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 17px;
+            font-weight: 500;
         }
 
-        .playlist-desc {
-            opacity: 0.7;
-            font-size: 13px;
-        }
-
-        /* ---------------- ARTIST CARDS (CIRCLE) ---------------- */
-        .artist-row {
-            display: flex;
-            gap: 35px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .artist-card {
-            width: 150px;
-            text-align: center;
+        .add-btn {
+            margin: 20px 0;
+            display: inline-block;
+            padding: 10px 18px;
+            background: #4a95ff;
+            border-radius: 8px;
             cursor: pointer;
-            transition: 0.25s;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
         }
-
-        .artist-card:hover {
-            transform: scale(1.05);
-        }
-
-        .artist-card img {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .artist-name {
-            margin-top: 12px;
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .artist-label {
-            opacity: 0.7;
-            font-size: 13px;
-        }
-
+        .add-btn:hover { background: #6aa7ff; }
     </style>
 </head>
 
 <body>
 
-<!-- ---------------- HEADER ---------------- -->
-<div class="header">
-    <div class="logo">Mimiu Studio</div>
+<jsp:include page="/views/header.jsp"/>
 
-    <nav>
-        <a href="home.jsp">Trang chủ</a>
-        <a href="search.jsp">Tìm kiếm</a>
-        <a href="library.jsp">Thư viện</a>
-        <a href="create.jsp">Tạo Playlist</a>
-    </nav>
-</div>
+<div class="header-spacer"></div>
 
-
-<!-- ---------------- CONTENT ---------------- -->
 <div class="container">
 
-    <!-- FILTER TAGS -->
-    <div class="filter-tags">
-        <div id="tagPlaylist" class="tag-btn">Danh sách phát</div>
-        <div id="tagArtist" class="tag-btn">Nghệ sĩ</div>
+    <div class="section-title">Playlist của bạn</div>
+
+    <!-- NÚT TẠO PLAYLIST -->
+    <a href="${pageContext.request.contextPath}/playlist?action=create" class="add-btn">
+        + Tạo Playlist
+    </a>
+
+    <!-- LIST PLAYLIST -->
+    <div class="playlist-row">
+        <c:forEach var="pl" items="${playlists}">
+            <div class="playlist-card"
+                 onclick="location.href='${pageContext.request.contextPath}/playlist?action=detail&id=${pl.playlistId}'">
+
+                <img class="playlist-img" 
+     src="${pageContext.request.contextPath}/images/playlist_default.jpg">
+
+                <div class="playlist-name">${pl.name}</div>
+            </div>
+        </c:forEach>
+
+        <c:if test="${empty playlists}">
+            <p>Bạn chưa có playlist nào. Hãy tạo mới!</p>
+        </c:if>
     </div>
 
-    <!-- PLAYLIST SECTION -->
-    <div id="playlistSection">
-
-        <div class="section-title">Danh sách phát</div>
-
-        <div class="playlist-row">
-
-            <div class="playlist-card">
-                <img src="https://i.scdn.co/image/ab67616d0000b27300c1ff717a8ba4a8988e85b2">
-                <div class="playlist-name">Summer Mood</div>
-                <div class="playlist-desc">24 bài hát</div>
-            </div>
-
-            <div class="playlist-card">
-                <img src="https://i.scdn.co/image/ab67616d0000b273b369e3a27c287fa42ccf7bbc">
-                <div class="playlist-name">Deep Focus</div>
-                <div class="playlist-desc">18 bài hát</div>
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- ARTIST SECTION -->
-    <div id="artistSection">
-
-        <div class="section-title" style="margin-top:40px;">Nghệ sĩ</div>
-
-        <div class="artist-row">
-
-            <div class="artist-card">
-                <img src="https://i.scdn.co/image/ab6761610000e5ebe7182795e983c2ba8b4cfec1">
-                <div class="artist-name">Nova</div>
-                <div class="artist-label">Nghệ sĩ</div>
-            </div>
-
-            <div class="artist-card">
-                <img src="https://i.scdn.co/image/ab6761610000e5eb989b71b3170f547fe36f1bfc">
-                <div class="artist-name">Kira</div>
-                <div class="artist-label">Nghệ sĩ</div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div> <!-- END container -->
-
-
-<!-- ---------------- FILTER LOGIC ---------------- -->
-<script>
-    const tagPlaylist = document.getElementById("tagPlaylist");
-    const tagArtist = document.getElementById("tagArtist");
-
-    const playlistSection = document.getElementById("playlistSection");
-    const artistSection   = document.getElementById("artistSection");
-
-    function resetAll() {
-        tagPlaylist.classList.remove("active");
-        tagArtist.classList.remove("active");
-        playlistSection.style.display = "block";
-        artistSection.style.display = "block";
-    }
-
-    tagPlaylist.onclick = function () {
-        // nếu đang active → bỏ chọn, hiển thị cả 2
-        if (tagPlaylist.classList.contains("active")) {
-            resetAll();
-            return;
-        }
-
-        // chọn Playlist
-        tagPlaylist.classList.add("active");
-        tagArtist.classList.remove("active");
-
-        playlistSection.style.display = "block";
-        artistSection.style.display = "none";
-    };
-
-    tagArtist.onclick = function () {
-        // nếu đang active → bỏ chọn, hiển thị cả 2
-        if (tagArtist.classList.contains("active")) {
-            resetAll();
-            return;
-        }
-
-        // chọn Nghệ sĩ
-        tagArtist.classList.add("active");
-        tagPlaylist.classList.remove("active");
-
-        playlistSection.style.display = "none";
-        artistSection.style.display = "block";
-    };
-</script>
-
+</div>
 </body>
 </html>

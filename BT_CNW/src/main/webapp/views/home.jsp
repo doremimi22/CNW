@@ -108,10 +108,10 @@
         .dropdown:hover .drop-btn { opacity: 1; }
 
         /* USER ICON */
-        .user-icon {
+        .user-name {
             display: inline-block;
             margin-left: 25px;
-            font-size: 20px;
+            font-size: 15px;
             cursor: default;
             opacity: .85;
             transition: .2s;
@@ -219,6 +219,7 @@
         }
         .song-name { margin-top: 10px; }
         .artist { font-size: 13px; opacity:.7; }
+        
     </style>
 </head>
 
@@ -243,7 +244,7 @@
         <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
         <a href="${pageContext.request.contextPath}/search">Tìm kiếm</a>
         <a href="${pageContext.request.contextPath}/library">Thư viện</a>
-
+ <a href="${pageContext.request.contextPath}/playlist">Playlist</a>
         <!-- ADMIN ONLY: TẠO MỚI -->
         <c:if test="${sessionScope.user.role == 'admin'}">
             <div class="dropdown">
@@ -258,7 +259,8 @@
 
         <!-- USER ICON + LOGOUT -->
         <c:if test="${not empty sessionScope.user}">
-            <div class="user-icon" title="${sessionScope.user.username}">👤</div>
+            <div class="user-name" title="${sessionScope.fullname}">👤Hello ${sessionScope.fullname}</div>
+           
             <a href="${pageContext.request.contextPath}/logout" style="color:#ff7f7f;">Đăng xuất</a>
         </c:if>
 
