@@ -55,7 +55,8 @@
 </head>
 
 <body>
-
+<!-- ================= REUSE HEADER ================= -->
+<jsp:include page="/views/components/header.jsp"></jsp:include>
 <a class="back" href="${pageContext.request.contextPath}/home">← Quay lại trang chủ</a>
 
 <div class="song-detail">

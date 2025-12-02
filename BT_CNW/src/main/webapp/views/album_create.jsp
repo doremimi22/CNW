@@ -22,62 +22,7 @@
             overflow-x: hidden;
             padding-top: 105px;
         }
-
-        /* HEADER */
-        .header {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0,0,0,0.45);
-            backdrop-filter: blur(12px);
-            z-index: 1000;
-        }
-
-        .logo { font-size: 26px; font-weight: bold; }
-
-        nav a {
-            margin-left: 35px;
-            color: white;
-            opacity: .9;
-            text-decoration: none;
-        }
-
-        nav a:hover { opacity: 1; }
-
-        .dropdown {
-            position: relative;
-            display: inline-block;
-            margin-left: 35px;
-        }
-
-        .dropdown-content {
-            display:none;
-            position:absolute;
-            top:30px; left:0;
-            width:160px;
-            padding:8px 0;
-            border-radius:10px;
-            background:rgba(30,30,30,0.95);
-        }
-
-        .dropdown:hover .dropdown-content { display:block; }
-
-        .dropdown-content a {
-            display:block;
-            padding:10px 14px;
-            color:white;
-        }
-
-        .dropdown-content a:hover {
-            background:#555;
-        }
-
-        .header-spacer { height: 95px; }
-
+ 
         /* CONTENT */
         .container {
             max-width:1100px;
@@ -160,41 +105,8 @@
 </head>
 
 <body>
-
-<!-- HEADER -->
-<div class="header">
-    <div class="logo">
-        <c:choose>
-            <c:when test="${sessionScope.user.role == 'admin'}">
-                Mimiu Studio <span style="color:#ffcc00;">★ Admin</span>
-            </c:when>
-            <c:otherwise>Mimiu Studio</c:otherwise>
-        </c:choose>
-    </div>
-
-    <nav>
-        <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
-        <a href="${pageContext.request.contextPath}/search">Tìm kiếm</a>
-        <a href="${pageContext.request.contextPath}/library">Thư viện</a>
-
-        <c:if test="${sessionScope.user.role == 'admin'}">
-            <div class="dropdown">
-                <span class="drop-btn">Tạo mới ▼</span>
-                <div class="dropdown-content">
-                    <a href="${pageContext.request.contextPath}/song/create">Tạo bài hát</a>
-                    <a href="${pageContext.request.contextPath}/album/create">Tạo album</a>
-                    <a href="${pageContext.request.contextPath}/artist/create">Tạo nghệ sĩ</a>
-                </div>
-            </div>
-        </c:if>
-
-        <a class="user-icon">👤</a>
-        <a href="${pageContext.request.contextPath}/logout" style="color:#ff7f7f;">Đăng xuất</a>
-    </nav>
-</div>
-
-<div class="header-spacer"></div>
-
+<!-- ================= REUSE HEADER ================= -->
+<jsp:include page="/views/components/header.jsp"></jsp:include>
 <!-- CONTENT -->
 <div class="container">
 

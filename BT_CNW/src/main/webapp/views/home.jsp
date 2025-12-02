@@ -17,110 +17,6 @@
             overflow-x: hidden;
         }
 
-        /* ================= HEADER ================= */
-        .header {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0,0,0,0.45);
-            backdrop-filter: blur(12px);
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 26px;
-            font-weight: bold;
-        }
-
-        nav a {
-            margin-left: 35px;
-            font-size: 15px;
-            color: white;
-            opacity: .9;
-            text-decoration: none;
-        }
-
-        nav a:hover { opacity: 1; }
-
-        .header-spacer { height: 100px; }
-
-     /* DROPDOWN FIXED */
-.dropdown {
-    position: relative;
-    display: inline-block;
-    margin-left: 35px;
-}
-
-.drop-btn {
-    color: white;
-    opacity: .9;
-    cursor: pointer;
-    font-size: 15px;
-    padding: 6px 0;
-}
-
-/* MENU */
-.dropdown-content {
-    display: none;
-    position: absolute;
-    top: 30px;
-    left: 0;
-
-    background: rgba(30, 30, 30, 0.95);
-    backdrop-filter: blur(6px);
-    border-radius: 10px;
-
-    width: 160px;
-    padding: 8px 0;
-
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-    z-index: 9999;
-
-    /* QUAN TRỌNG: tạo vùng hover nối liền */
-    padding-top: 6px;
-}
-
-/* Hiển dropdown khi hover */
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-/* ITEM */
-.dropdown-content a {
-    display: block;
-    padding: 10px 14px;
-    font-size: 14px;
-    text-decoration: none;
-    color: white;
-    opacity: .85;
-}
-
-.dropdown-content a:hover {
-    background: #555;
-    opacity: 1;
-}
-
-        .dropdown:hover .dropdown-content { display: block; }
-        .dropdown:hover .drop-btn { opacity: 1; }
-
-        /* USER ICON */
-        .user-name {
-            display: inline-block;
-            margin-left: 25px;
-            font-size: 15px;
-            cursor: default;
-            opacity: .85;
-            transition: .2s;
-        }
-        .user-icon:hover {
-            opacity: 1;
-            transform: scale(1.07);
-        }
-
         /* ================= HERO SLIDER ================= */
         .hero-music-slider {
             position: relative;
@@ -187,7 +83,7 @@
         .slider-btn.left { left: 10px; }
         .slider-btn.right { right: 10px; }
 
-        /* ================= LIST SECTIONS ================= */
+        /* LIST SECTIONS */
         .section-title {
             margin: 40px 0 15px 0;
             font-size: 22px;
@@ -217,61 +113,18 @@
             border-radius: 10px;
             object-fit: cover;
         }
+
         .song-name { margin-top: 10px; }
         .artist { font-size: 13px; opacity:.7; }
-        
+
+        .container { width: 90%; margin: auto; }
     </style>
 </head>
 
 <body>
 
-<!-- ================= HEADER ================= -->
-<div class="header">
-
-    <!-- LOGO + ADMIN BADGE -->
-    <div class="logo">
-        <c:choose>
-            <c:when test="${sessionScope.user.role == 'admin'}">
-                Mimiu Studio <span style="color:#ffcc00;">★ Admin</span>
-            </c:when>
-            <c:otherwise>
-                Mimiu Studio
-            </c:otherwise>
-        </c:choose>
-    </div>
-
-    <nav>
-        <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
-        <a href="${pageContext.request.contextPath}/search">Tìm kiếm</a>
-        <a href="${pageContext.request.contextPath}/library">Thư viện</a>
- <a href="${pageContext.request.contextPath}/playlist">Playlist</a>
-        <!-- ADMIN ONLY: TẠO MỚI -->
-        <c:if test="${sessionScope.user.role == 'admin'}">
-            <div class="dropdown">
-                <span class="drop-btn">Tạo mới ▼</span>
-                <div class="dropdown-content">
-                    <a href="${pageContext.request.contextPath}/song/create">Tạo bài hát</a>
-                    <a href="${pageContext.request.contextPath}/album/create">Tạo album</a>
-                      <a href="${pageContext.request.contextPath}/artist/create">Tạo nghệ sĩ</a>
-                </div>
-            </div>
-        </c:if>
-
-        <!-- USER ICON + LOGOUT -->
-        <c:if test="${not empty sessionScope.user}">
-            <div class="user-name" title="${sessionScope.fullname}">👤Hello ${sessionScope.fullname}</div>
-           
-            <a href="${pageContext.request.contextPath}/logout" style="color:#ff7f7f;">Đăng xuất</a>
-        </c:if>
-
-        <!-- CHƯA ĐĂNG NHẬP -->
-        <c:if test="${empty sessionScope.user}">
-            <a href="${pageContext.request.contextPath}/login" style="color:#8fb4ff;">Đăng nhập</a>
-        </c:if>
-    </nav>
-</div>
-
-<div class="header-spacer"></div>
+<!-- ================= REUSE HEADER ================= -->
+<jsp:include page="/views/components/header.jsp"></jsp:include>
 
 <!-- ================= MAIN WRAPPER ================= -->
 <div class="container">
@@ -293,12 +146,10 @@
         </div>
     </div>
 
-    <!-- SLIDE TỪ DB -->
+    <!-- SLIDE TỪ DATABASE -->
     <c:forEach var="s" items="${songs}">
-        <div class="music-slide"
-             style="background-image: url('${s.thumbnail}');">
+        <div class="music-slide" style="background-image: url('${s.thumbnail}');">
             <div class="slide-gradient"></div>
-
             <div class="slide-left">
                 <h1 class="slide-title">${s.title}</h1>
                 <div class="slide-sub">

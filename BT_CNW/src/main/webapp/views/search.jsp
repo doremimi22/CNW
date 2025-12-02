@@ -15,79 +15,19 @@
             background: #0b0b0b;
             color: white;
             overflow-x: hidden;
-            padding-top: 105px;
         }
 
-        /* ================= HEADER ================= */
-        .header {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0,0,0,0.45);
-            backdrop-filter: blur(12px);
-            z-index: 1000;
-        }
-
-        .logo { font-size: 26px; font-weight: bold; }
-
-        nav a {
-            margin-left: 35px;
-            font-size: 15px;
-            text-decoration: none;
-            color: white;
-            opacity: .9;
-        }
-        nav a:hover { opacity: 1; }
-
-        .dropdown { position: relative; display: inline-block; margin-left: 35px; }
-        .drop-btn { cursor: pointer; opacity:.9; }
-
-        .dropdown-content {
-            display:none;
-            position:absolute;
-            top:30px; left:0;
-            width:160px;
-            background:rgba(30,30,30,0.95);
-            border-radius:10px;
-            padding:8px 0;
-        }
-
-        .dropdown:hover .dropdown-content { display:block; }
-
-        .dropdown-content a {
-            display:block;
-            padding:10px 14px;
-            font-size:14px;
-            text-decoration:none;
-            color:white;
-            opacity:.85;
-        }
-        .dropdown-content a:hover { background:#555; }
-
-        .user-icon {
-            margin-left:25px;
-            font-size:20px;
-            opacity:.85;
-        }
-        .user-icon:hover { opacity:1; }
-
-        .header-spacer { height: 95px; }
-
-        /* ================= CONTENT ================= */
+     
+        /* ================= SEARCH PAGE CONTENT ================= */
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 25px;
+            width: 90%;
+            margin: auto;
         }
 
         .search-title {
             font-size: 35px;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .search-box {
@@ -100,13 +40,12 @@
             font-size: 18px;
             outline: none;
         }
-
-        .search-box:focus { border-color:#777; }
+        .search-box:focus { border-color: #777; }
 
         .section-title {
+            margin: 40px 0 15px 0;
             font-size: 22px;
             font-weight: bold;
-            margin: 40px 0 15px 0;
         }
 
         .card-row {
@@ -118,71 +57,30 @@
         .card-row::-webkit-scrollbar { display:none; }
 
         .card {
-            width: 160px;
+            width: 170px;
             background: #1b1b1b;
-            padding: 12px;
             border-radius: 12px;
+            padding: 12px;
             cursor: pointer;
-            transition:.3s;
+            transition: .25s;
         }
         .card:hover { transform: scale(1.06); }
 
         .card img {
-            width: 100%;
-            height: 160px;
-            border-radius:10px;
-            object-fit:cover;
+            width: 100%; height: 170px;
+            border-radius: 10px;
+            object-fit: cover;
         }
 
-        .song-name { margin-top: 10px; font-size: 15px; }
+        .song-name { margin-top: 10px; }
         .artist { font-size: 13px; opacity:.7; }
     </style>
 </head>
 
 <body>
 
-<!-- ================= HEADER ================= -->
-<div class="header">
-    <div class="logo">
-        <c:choose>
-            <c:when test="${sessionScope.user.role == 'admin'}">
-                Mimiu Studio <span style="color:#ffcc00;">★ Admin</span>
-            </c:when>
-            <c:otherwise>Mimiu Studio</c:otherwise>
-        </c:choose>
-    </div>
-
-    <nav>
-        <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
-        <a href="${pageContext.request.contextPath}/search">Tìm kiếm</a>
-        <a href="${pageContext.request.contextPath}/library">Thư viện</a>
-
-        <!-- ADMIN MENU -->
-        <c:if test="${sessionScope.user.role == 'admin'}">
-            <div class="dropdown">
-                <span class="drop-btn">Tạo mới ▼</span>
-                <div class="dropdown-content">
-                    <a href="${pageContext.request.contextPath}/song/create">Tạo bài hát</a>
-                    <a href="${pageContext.request.contextPath}/album/create">Tạo album</a>
-                    <a href="${pageContext.request.contextPath}/artist/create">Tạo nghệ sĩ</a>
-                </div>
-            </div>
-        </c:if>
-
-        <!-- USER STATUS -->
-        <c:if test="${not empty sessionScope.user}">
-            <div class="user-icon" title="${sessionScope.user.username}">👤</div>
-            <a href="${pageContext.request.contextPath}/logout" style="color:#ff6f6f;">Đăng xuất</a>
-        </c:if>
-
-        <c:if test="${empty sessionScope.user}">
-            <a href="${pageContext.request.contextPath}/login" style="color:#8fb4ff;">Đăng nhập</a>
-        </c:if>
-    </nav>
-</div>
-
-<div class="header-spacer"></div>
-
+<!-- ================= REUSE HEADER ================= -->
+<jsp:include page="/views/components/header.jsp"></jsp:include>
 <!-- ================= CONTENT ================= -->
 <div class="container">
 
