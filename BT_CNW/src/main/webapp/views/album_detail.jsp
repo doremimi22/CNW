@@ -19,8 +19,6 @@
             padding-top:110px;
         }
 
-    
-        /* CONTENT */
         .container { max-width:1100px; margin:0 auto; padding:0 25px; }
 
         .album-header { display:flex; gap:40px; align-items:center; }
@@ -33,7 +31,20 @@
         .album-year { opacity:.75; margin-top:5px; }
         .album-desc { margin-top:15px; opacity:.85; line-height:1.5; }
 
-        /* ARTISTS */
+        /* DELETE BUTTON */
+        .delete-btn {
+            margin-top:20px;
+            display:inline-block;
+            padding:10px 18px;
+            background:#ff4d4d;
+            color:white;
+            border-radius:8px;
+            text-decoration:none;
+            font-weight:500;
+            transition:.2s;
+        }
+        .delete-btn:hover { background:#ff6b6b; }
+
         .artist-section { margin-top:40px; }
         .artist-row {
             display:flex; gap:15px; align-items:center;
@@ -44,7 +55,6 @@
             object-fit:cover; border:2px solid #6a4dfc;
         }
 
-        /* SONGS */
         .song-section { margin-top:40px; }
         .song-row {
             display:flex; align-items:center;
@@ -65,9 +75,9 @@
 </head>
 
 <body>
-<!-- ================= REUSE HEADER ================= -->
-<jsp:include page="/views/components/header.jsp"></jsp:include>
-<!-- CONTENT -->
+
+<jsp:include page="/views/header.jsp"></jsp:include>
+
 <div class="container">
 
     <!-- ALBUM HEADER -->
@@ -78,6 +88,15 @@
             <div class="album-title">${album.title}</div>
             <div class="album-year">${album.releaseYear}</div>
             <div class="album-desc">${album.description}</div>
+
+            <!-- ⭐ NÚT XÓA (CHỈ HIỆN VỚI ADMIN) ⭐ -->
+            <c:if test="${sessionScope.user.role == 'admin'}">
+                <a class="delete-btn"
+                   href="${pageContext.request.contextPath}/album?action=delete&id=${album.albumId}"
+                   onclick="return confirm('Bạn có chắc chắn muốn xóa album này không?')">
+                    🗑 Xóa album
+                </a>
+            </c:if>
         </div>
     </div>
 

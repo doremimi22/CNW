@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 @WebServlet("/playlist")
-public class PlaylistServler extends HttpServlet {
-
+public class PlaylistServlet extends HttpServlet {
+	  private static final long serialVersionUID = 1L;
     private PlaylistDAO playlistDAO = new PlaylistDAO();
     private SongDAO songDAO = new SongDAO();
     private PlaylistSongDAO playlistSongDAO = new PlaylistSongDAO();

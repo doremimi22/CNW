@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.bean.Album;
 import model.bean.Artist;
@@ -39,6 +40,9 @@ public class ArtistController extends HttpServlet {
             case "detail":
                 detail(req, resp);
                 break;
+            case "delete":
+                deleteArtist(req, resp);
+                return;
 
             default:
                 list(req, resp);
@@ -72,4 +76,35 @@ public class ArtistController extends HttpServlet {
 
         req.getRequestDispatcher("views/artist_detail.jsp").forward(req, resp);
     }
+    private void deleteArtist(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+
+        HttpSession session = req.getSession();
+        Object userObj = session.getAttribute("user");
+
+        // Kiểm tra đăng nhập
+        if (userObj == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+
+        // Kiểm tra quyền admin
+        String role = String.valueOf(session.getAttribute("role"));
+        if (role == null || !role.equalsIgnoreCase("admin")) {
+            resp.sendError(403, "Bạn không có quyền xóa nghệ sĩ");
+            return;
+        }
+
+        int id = Integer.parseInt(req.getParameter("id"));
+
+        ArtistDAO dao = new ArtistDAO();
+        boolean ok = dao.delete(id);
+
+        if (ok) {
+            resp.sendRedirect(req.getContextPath() + "/home");
+        } else {
+            resp.sendError(500, "Không thể xóa nghệ sĩ");
+        }
+    }
+
 }

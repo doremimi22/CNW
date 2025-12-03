@@ -11,6 +11,7 @@ import model.bo.SongBO;
 import model.dao.ArtistDAO;
 import model.dao.SongDAO;
 import model.bean.Song;
+import model.bean.User;
 import model.bean.Artist;
 
 @WebServlet("/song")
@@ -43,6 +44,9 @@ public class SongController extends HttpServlet {
             req.setAttribute("song", s);
             req.getRequestDispatcher("/views/song_detail.jsp").forward(req, resp);
             return;
+        case "delete":
+            deleteSong(req, resp);
+            return;
 
             default:
                 list(req, resp);
@@ -71,5 +75,32 @@ public class SongController extends HttpServlet {
 
         req.getRequestDispatcher("/views/song_detail.jsp").forward(req, resp);
     }
-    
+
+private void deleteSong(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
+
+    HttpSession session = req.getSession();
+
+    User user = (User) session.getAttribute("user");
+
+    if (user == null) {
+        resp.sendRedirect(req.getContextPath() + "/login");
+        return;
+    }
+
+    if (!"admin".equals(user.getRole())) {
+        resp.sendError(403, "Không có quyền xóa bài hát");
+        return;
+    }
+
+    int id = Integer.parseInt(req.getParameter("id"));
+    boolean ok = songDAO.delete(id);
+
+    if (ok) {
+        resp.sendRedirect(req.getContextPath() + "/home");
+    } else {
+        resp.sendError(500, "Không thể xóa bài hát");
+    }
+}
+
 }

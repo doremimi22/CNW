@@ -131,5 +131,28 @@ public class AlbumDAO {
         }
 
         return list;
+    }public boolean delete(int albumId) {
+        try (Connection conn = DBConnect.getConnection()) {
+
+            // 1) XÓA LIÊN KẾT TRONG BẢNG TRUNG GIAN
+            String sql1 = "DELETE FROM album_songs WHERE album_id = ?";
+            PreparedStatement ps1 = conn.prepareStatement(sql1);
+            ps1.setInt(1, albumId);
+            ps1.executeUpdate();
+            ps1.close();
+
+            // 2) XÓA ALBUM
+            String sql2 = "DELETE FROM albums WHERE album_id = ?";
+            PreparedStatement ps2 = conn.prepareStatement(sql2);
+            ps2.setInt(1, albumId);
+            int rows = ps2.executeUpdate();
+            ps2.close();
+
+            return rows > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

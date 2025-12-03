@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <style>
@@ -27,9 +27,9 @@
         opacity: .9;
         text-decoration: none;
     }
+
     nav a:hover { opacity: 1; }
 
-    /* DROPDOWN */
     .dropdown {
         position: relative;
         display: inline-block;
@@ -49,50 +49,48 @@
         position: absolute;
         top: 30px;
         left: 0;
-
+        width: 160px;
+        padding: 8px 0;
         background: rgba(30, 30, 30, 0.95);
         backdrop-filter: blur(6px);
         border-radius: 10px;
-
-        width: 160px;
-        padding: 8px 0;
-
         box-shadow: 0 4px 10px rgba(0,0,0,0.4);
         z-index: 9999;
+        padding-top: 6px;
     }
 
     .dropdown:hover .dropdown-content { display: block; }
+
     .dropdown-content a {
         display: block;
         padding: 10px 14px;
         font-size: 14px;
-        text-decoration: none;
         color: white;
         opacity: .85;
+        text-decoration: none;
     }
+
     .dropdown-content a:hover {
         background: #555;
         opacity: 1;
     }
 
-    /* USER ICON */
-    .user-icon {
+    .user-name {
         display: inline-block;
         margin-left: 25px;
-        font-size: 20px;
+        font-size: 15px;
         cursor: default;
         opacity: .85;
-        transition: .2s;
     }
-    .user-icon:hover {
-        opacity: 1;
-        transform: scale(1.07);
-    }
+
+    .header-spacer { height: 100px; }
 </style>
 
+
+<!-- ================= HEADER ================= -->
 <div class="header">
 
-    <!-- LOGO -->
+    <!-- LOGO + ADMIN BADGE -->
     <div class="logo">
         <c:choose>
             <c:when test="${sessionScope.user.role == 'admin'}">
@@ -107,10 +105,9 @@
     <nav>
         <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
         <a href="${pageContext.request.contextPath}/search">Tìm kiếm</a>
-        <a href="${pageContext.request.contextPath}/library">Thư viện</a>
         <a href="${pageContext.request.contextPath}/playlist">Playlist</a>
 
-        <!-- ADMIN: CREATE MENU -->
+        <!-- ADMIN: dropdown -->
         <c:if test="${sessionScope.user.role == 'admin'}">
             <div class="dropdown">
                 <span class="drop-btn">Tạo mới ▼</span>
@@ -122,11 +119,9 @@
             </div>
         </c:if>
 
-        <!-- USER LOGGED -->
+        <!-- USER -->
         <c:if test="${not empty sessionScope.user}">
-            <div class="user-icon" title="${sessionScope.fullname}">
-                👤
-            </div>
+            <div class="user-name">👤Hello ${sessionScope.fullname}</div>
             <a href="${pageContext.request.contextPath}/logout" style="color:#ff7f7f;">Đăng xuất</a>
         </c:if>
 
@@ -136,3 +131,5 @@
         </c:if>
     </nav>
 </div>
+
+<div class="header-spacer"></div>

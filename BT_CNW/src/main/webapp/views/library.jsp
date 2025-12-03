@@ -73,7 +73,6 @@
 
 <jsp:include page="/views/header.jsp"/>
 
-<div class="header-spacer"></div>
 
 <div class="container">
 

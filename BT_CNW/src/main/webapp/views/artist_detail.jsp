@@ -112,6 +112,21 @@
     font-size:13px;
     opacity:.7;
 }
+.btn-delete {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 8px 14px;
+    background: #ff5555;
+    color: white;
+    border-radius: 8px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.btn-delete:hover {
+    background: #ff7777;
+}
 
         .year { opacity:.6; font-size:14px; }
     </style>
@@ -120,7 +135,7 @@
 <body>
 
 <!-- ================= REUSE HEADER ================= -->
-<jsp:include page="/views/components/header.jsp"></jsp:include>
+<jsp:include page="/views/header.jsp"></jsp:include>
 <!-- ================= CONTENT ================= -->
 <div class="container">
 
@@ -132,6 +147,14 @@
 
         <div class="artist-info">
             <h1>${artist.name}</h1>
+            <c:if test="${sessionScope.user.role == 'admin'}">
+    <a href="${pageContext.request.contextPath}/artist?action=delete&id=${artist.artistId}"
+       onclick="return confirm('Bạn có chắc chắn muốn xóa nghệ sĩ này không?')"
+       class="btn-delete">
+       🗑 Xóa nghệ sĩ
+    </a>
+</c:if>
+            
             <div class="birthday">🎂 Sinh nhật: ${artist.birthday}</div>
         </div>
     </div>

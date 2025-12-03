@@ -78,6 +78,18 @@ public class SongDAO {
         // tái sử dụng hàm đã có
         return getSongById(id);
     }
+    public boolean delete(int songId) {
+        String sql = "DELETE FROM songs WHERE song_id = ?";
+        try {
+        	Connection con = DBConnect.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, songId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     /* ============================
         LẤY BÀI HÁT TRONG ALBUM

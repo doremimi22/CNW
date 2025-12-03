@@ -23,33 +23,6 @@
             overflow-x: hidden;
         }
 
-        /* HEADER */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-        }
-        .header .logo {
-            font-size: 26px;
-            font-weight: bold;
-        }
-        .header nav a {
-            margin-left: 35px;
-            text-decoration: none;
-            color: white;
-            opacity: 0.85;
-            font-size: 15px;
-        }
-        .header nav a:hover { opacity: 1; }
-        .header-spacer { height: 100px; }
 
         /* WRAPPER */
         .container {
@@ -126,19 +99,8 @@
 </head>
 
 <body>
-
-<!-- HEADER -->
-<div class="header">
-    <div class="logo">Mimiu Studio</div>
-
-    <nav>
-        <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
-        <a href="#">Tìm kiếm</a>
-        <a href="#">Thư viện</a>
-        <a href="#">Tạo Playlist</a>
-    </nav>
-</div>
-<div class="header-spacer"></div>
+<!-- ================= REUSE HEADER ================= -->
+<jsp:include page="/views/header.jsp"></jsp:include>
 
 <!-- CONTENT -->
 <div class="container">

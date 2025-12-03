@@ -51,12 +51,30 @@
             font-size: 14px;
         }
         .back:hover { color: white; }
+
+        /* BUTTON DELETE */
+        .btn-delete {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 18px;
+            background: #ff4d4d;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: .2s;
+        }
+        .btn-delete:hover {
+            background: #ff6b6b;
+        }
     </style>
 </head>
 
 <body>
-<!-- ================= REUSE HEADER ================= -->
-<jsp:include page="/views/components/header.jsp"></jsp:include>
+
+<!-- HEADER -->
+<jsp:include page="/views/header.jsp"></jsp:include>
+
 <a class="back" href="${pageContext.request.contextPath}/home">← Quay lại trang chủ</a>
 
 <div class="song-detail">
@@ -81,6 +99,16 @@
                 ► Mở bài hát
             </a>
         </div>
+
+        <!-- NÚT XOÁ – CHỈ HIỆN VỚI ADMIN -->
+        <c:if test="${sessionScope.user.role == 'admin'}">
+            <a class="btn-delete"
+               href="${pageContext.request.contextPath}/song?action=delete&id=${song.songId}"
+               onclick="return confirm('Bạn có chắc chắn muốn xóa bài hát này không?')">
+                🗑 Xóa bài hát
+            </a>
+        </c:if>
+
     </div>
 
 </div>

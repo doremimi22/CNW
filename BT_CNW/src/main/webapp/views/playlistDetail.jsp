@@ -9,13 +9,30 @@
     <title>${playlist.name} – Playlist</title>
 
     <style>
-        body {
+        /* RESET CHO TOÀN TRANG – CHỐNG TRÀN VIỀN / LỆCH HEADER */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
             font-family: "Poppins", sans-serif;
             background: #0b0b0b;
             color: white;
         }
-        .header-spacer { height: 100px; }
-        .container { width: 90%; margin: auto; }
+
+        .header-spacer {
+            height: 100px;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+        }
 
         /* PLAYLIST HEADER */
         .pl-header {
@@ -24,6 +41,7 @@
             gap: 25px;
             margin-bottom: 40px;
         }
+
         .pl-cover {
             width: 200px;
             height: 200px;
@@ -35,10 +53,12 @@
             font-size: 60px;
             opacity: .7;
         }
+
         .pl-info h1 {
             font-size: 48px;
             font-weight: 900;
         }
+
         .pl-info .creator {
             margin-top: 6px;
             opacity: .8;
@@ -55,13 +75,15 @@
             align-items: center;
             transition: .2s;
         }
+
         .song-item:hover {
             background: #292929;
         }
-.song-info {
-    cursor: pointer;
-    width: 100%;
-}
+
+        .song-info {
+            cursor: pointer;
+            width: 100%;
+        }
 
         .btn-remove {
             background: #ff6f6f;
@@ -78,6 +100,7 @@
             padding: 18px;
             border-radius: 12px;
         }
+
         #searchInput {
             width: 100%;
             padding: 12px;
@@ -97,12 +120,14 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .add-btn {
             background: #4a95ff;
             padding: 6px 14px;
             border-radius: 8px;
             cursor: pointer;
         }
+
         .add-btn:hover {
             background: #6aa7ff;
         }
@@ -111,8 +136,10 @@
 
 <body>
 
+<!-- HEADER CHUNG -->
 <jsp:include page="/views/header.jsp" />
 
+<!-- ĐẨY NỘI DUNG XUỐNG DƯỚI HEADER FIXED -->
 <div class="header-spacer"></div>
 
 <div class="container">
@@ -123,7 +150,10 @@
 
         <div class="pl-info">
             <h1>${playlist.name}</h1>
-            <div class="creator">Danh sách công khai – Người tạo: <b>${sessionScope.fullname}</b></div>
+            <div class="creator">
+                Danh sách công khai – Người tạo:
+                <b>${sessionScope.fullname}</b>
+            </div>
         </div>
     </div>
 
@@ -131,22 +161,20 @@
     <h2>Bài hát trong playlist</h2>
 
     <c:forEach var="s" items="${songs}">
-    <div class="song-item">
-    <div class="song-info"
-         onclick="window.location.href='${pageContext.request.contextPath}/song?action=detail&id=${s.song.songId}'">
-        <b>${s.song.title}</b><br>
-        <span style="opacity:.7">${s.song.year}</span>
-    </div>
+        <div class="song-item">
+            <div class="song-info"
+                 onclick="location.href='${pageContext.request.contextPath}/song?action=detail&id=${s.song.songId}'">
+                <b>${s.song.title}</b><br>
+                <span style="opacity:.7">${s.song.year}</span>
+            </div>
 
-    <a class="btn-remove"
-       onclick="event.stopPropagation()"
-       href="${pageContext.request.contextPath}/playlist?action=removeSong&playlistSongId=${s.playlistSongId}&playlistId=${playlist.playlistId}">
-        Xóa
-    </a>
-</div>
-
-
-</c:forEach>
+            <a class="btn-remove"
+               onclick="event.stopPropagation()"
+               href="${pageContext.request.contextPath}/playlist?action=removeSong&playlistSongId=${s.playlistSongId}&playlistId=${playlist.playlistId}">
+                Xóa
+            </a>
+        </div>
+    </c:forEach>
 
     <c:if test="${empty songs}">
         <p>Playlist chưa có bài hát.</p>
@@ -163,17 +191,16 @@
         <div id="searchResult">
             <!-- RENDER SẴN TẤT CẢ BÀI HÁT, JS CHỈ ẨN/HIỆN -->
             <c:forEach var="s" items="${allSongs}">
-    <div class="search-result-item"
-         data-title="${fn:toLowerCase(s.title)}">
-        <div style="cursor:pointer"
-             onclick="location.href='${pageContext.request.contextPath}/song?action=detail&id=${s.songId}'">
-            <b>${s.title}</b><br>
-            <span style="opacity:.7">${s.year}</span>
-        </div>
-        <button class="add-btn" onclick="addSong(${s.songId})">+</button>
-    </div>
-</c:forEach>
-
+                <div class="search-result-item"
+                     data-title="${fn:toLowerCase(s.title)}">
+                    <div style="cursor:pointer"
+                         onclick="location.href='${pageContext.request.contextPath}/song?action=detail&id=${s.songId}'">
+                        <b>${s.title}</b><br>
+                        <span style="opacity:.7">${s.year}</span>
+                    </div>
+                    <button class="add-btn" onclick="addSong(${s.songId})">+</button>
+                </div>
+            </c:forEach>
         </div>
     </div>
 

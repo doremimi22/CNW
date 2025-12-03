@@ -59,7 +59,7 @@
 
 <body>
 <!-- ================= REUSE HEADER ================= -->
-<jsp:include page="/views/components/header.jsp"></jsp:include>
+<jsp:include page="/views/header.jsp"></jsp:include>
 
 
 <div class="container">

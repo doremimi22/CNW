@@ -197,4 +197,29 @@ public class ArtistDAO {
 
         return false;
     }
+    public boolean delete(int artistId) {
+        try (Connection conn = DBConnect.getConnection()) {
+
+            // Xoá liên kết bảng song_artist nếu có
+            String sql1 = "DELETE FROM song_artists WHERE artist_id = ?";
+            PreparedStatement ps1 = conn.prepareStatement(sql1);
+            ps1.setInt(1, artistId);
+            ps1.executeUpdate();
+            ps1.close();
+
+            // Xoá nghệ sĩ
+            String sql2 = "DELETE FROM artists WHERE artist_id = ?";
+            PreparedStatement ps2 = conn.prepareStatement(sql2);
+            ps2.setInt(1, artistId);
+            int rows = ps2.executeUpdate();
+            ps2.close();
+
+            return rows > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

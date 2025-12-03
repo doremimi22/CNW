@@ -7,9 +7,23 @@
     <title>Tạo Playlist – Mimiu Studio</title>
 
     <style>
-        body { font-family: "Poppins", sans-serif; background:#0b0b0b; color:white; }
+        /* RESET LỖI HEADER LỆCH */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        .header-spacer { height:100px; }
+        body {
+            font-family: "Poppins", sans-serif;
+            background:#0b0b0b;
+            color:white;
+            overflow-x: hidden;
+        }
+
+        .header-spacer {
+            height: 100px;
+        }
 
         .box {
             width: 420px;
@@ -54,8 +68,10 @@
 
 <body>
 
+<!-- INCLUDE HEADER -->
 <jsp:include page="/views/header.jsp"/>
 
+<!-- SPACER (CHỈ 1 CÁI, KHÔNG NÊN BỎ) -->
 <div class="header-spacer"></div>
 
 <div class="box">
